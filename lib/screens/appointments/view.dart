@@ -43,7 +43,7 @@ class _AppointmentPageState extends State<AppointmentPage> {
                             style: TextStyle(
                                 fontSize: 14.sp,
                                 fontWeight: FontWeight.bold,
-                                color: Colors.black)))
+                                color: Theme.of(context).primaryColor)))
                   ],
                 );
         },
@@ -54,10 +54,9 @@ class _AppointmentPageState extends State<AppointmentPage> {
                 style: TextStyle(
                     fontSize: 14.sp,
                     fontWeight: FontWeight.bold,
-                    color: Colors.black)),
+                    color: Theme.of(context).primaryColor)),
             content: ElevatedButton(
                 style: ElevatedButton.styleFrom(
-                    backgroundColor: Theme.of(context).primaryColor,
                     fixedSize: Size(120.w, 44.h),
                     shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(9.r))),
@@ -71,24 +70,24 @@ class _AppointmentPageState extends State<AppointmentPage> {
                 },
                 child: Text(
                   'choose day',
-                  style: TextStyle(fontSize: 16.sp),
+                  style: TextStyle(fontSize: 16.sp, color: Colors.white),
                 )),
           ),
           Step(
             isActive: controller.currentIndex == 1,
-            title: Text('Choose day',
+            title: Text('Choose time',
                 style: TextStyle(
                     fontSize: 14.sp,
                     fontWeight: FontWeight.bold,
-                    color: Colors.black)),
+                    color: Theme.of(context).primaryColor)),
             content: Container(
               padding: EdgeInsetsDirectional.only(start: 10.w, end: 5.w),
               decoration: BoxDecoration(
-                  color: Theme.of(context).primaryColor,
+                  color: Colors.amberAccent[400],
                   borderRadius: BorderRadius.circular(9.r)),
               child: DropdownButton<String>(
                 iconEnabledColor: Colors.white,
-                dropdownColor: Theme.of(context).primaryColor,
+                dropdownColor: const Color(0xff1A1A1A),
                 borderRadius: BorderRadius.circular(9.r),
                 value: controller.appointment,
                 items: List.generate(
@@ -112,12 +111,13 @@ class _AppointmentPageState extends State<AppointmentPage> {
             ),
           ),
           Step(
+              isActive: controller.currentIndex == 2,
               state: StepState.complete,
               title: Text('Confirm appointment',
                   style: TextStyle(
                       fontSize: 14.sp,
                       fontWeight: FontWeight.bold,
-                      color: Colors.black)),
+                      color: Theme.of(context).primaryColor)),
               content: MyButton(
                 text: 'Confirm',
                 onPress: controller.confirmAppointment,

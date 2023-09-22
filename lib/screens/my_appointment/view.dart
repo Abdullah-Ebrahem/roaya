@@ -22,7 +22,8 @@ class _MyAppointmentState extends State<MyAppointment> {
         body: Center(
           child: Text(
             CacheHeper.getAppointment(),
-            style: TextStyle(fontSize: 25.sp),
+            style: TextStyle(
+                fontSize: 25.sp, color: Theme.of(context).primaryColor),
           ),
         ));
   }

@@ -59,7 +59,7 @@ class _InputState extends State<Input> {
             decoration: InputDecoration(
               errorStyle: TextStyle(fontSize: 13.sp),
               filled: true,
-              fillColor: const Color(0xffF2F2F2),
+              fillColor: Theme.of(context).inputDecorationTheme.fillColor,
               suffixIcon: widget.isPassword
                   ? GestureDetector(
                       onTap: () {

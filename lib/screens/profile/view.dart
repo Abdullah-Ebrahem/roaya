@@ -3,17 +3,19 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:sec_project/core/cache_helper.dart';
 import 'package:sec_project/core/methods.dart';
 import 'package:sec_project/screens/login/view.dart';
+import 'package:sec_project/screens/profile/components/item_profile.dart';
+import 'package:sec_project/screens/profile/controller.dart';
 
 class ProfilePage extends StatelessWidget {
   const ProfilePage({super.key});
 
   @override
   Widget build(BuildContext context) {
+    final controller = ProfileController();
     return Scaffold(
       body: Center(
         child: Card(
           elevation: 10,
-          color: Theme.of(context).primaryColor,
           margin: EdgeInsetsDirectional.only(start: 20.w, end: 20.w),
           shape:
               RoundedRectangleBorder(borderRadius: BorderRadius.circular(9.r)),
@@ -26,48 +28,17 @@ class ProfilePage extends StatelessWidget {
                 width: MediaQuery.of(context).size.width,
                 height: 10.h,
               ),
-              Chip(
-                padding: EdgeInsetsDirectional.only(start: 5.w),
-                backgroundColor: Theme.of(context).primaryColor,
-                label: Text(
-                  '${CacheHeper.getFirstTime()} ${CacheHeper.getLastName()}',
-                  style: TextStyle(fontSize: 18.sp, color: Colors.white),
-                ),
-                avatar: Icon(
-                  Icons.person,
-                  color: Colors.white,
-                ),
-              ),
-              Chip(
-                padding: EdgeInsetsDirectional.only(start: 5.w),
-                backgroundColor: Theme.of(context).primaryColor,
-                label: Text(
-                  '${CacheHeper.getEmail()}',
-                  style: TextStyle(fontSize: 18.sp, color: Colors.white),
-                ),
-                avatar: Icon(
-                  Icons.email_rounded,
-                  color: Colors.white,
-                ),
-              ),
+              ItemProfile(
+                  title: controller.titles[0], icon: controller.icons[0]),
+              ItemProfile(
+                  title: controller.titles[1], icon: controller.icons[1]),
               GestureDetector(
-                onTap: () {
-                  CacheHeper.clear();
-                  navigateTo(page: const LoginPage(), withHistory: false);
-                },
-                child: Chip(
-                  padding: EdgeInsetsDirectional.only(start: 5.w),
-                  backgroundColor: Theme.of(context).primaryColor,
-                  label: Text(
-                    'logout',
-                    style: TextStyle(fontSize: 18.sp, color: Colors.white),
-                  ),
-                  avatar: Icon(
-                    Icons.logout_rounded,
-                    color: Colors.white,
-                  ),
-                ),
-              ),
+                  onTap: () {
+                    CacheHeper.clear();
+                    navigateTo(page: const LoginPage(), withHistory: false);
+                  },
+                  child: ItemProfile(
+                      title: controller.titles[2], icon: controller.icons[2])),
               SizedBox(
                 height: 20.h,
               ),

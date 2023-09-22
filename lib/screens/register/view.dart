@@ -6,8 +6,7 @@ import 'package:sec_project/core/button.dart';
 import 'package:sec_project/core/input.dart';
 import 'package:sec_project/core/methods.dart';
 import 'package:sec_project/screens/master/view.dart';
-import 'package:sec_project/screens/register/cubit.dart';
-import 'package:sec_project/screens/register/states.dart';
+import 'package:sec_project/screens/register/bloc/bloc.dart';
 
 class RegisterPage extends StatefulWidget {
   const RegisterPage({super.key});
@@ -19,9 +18,12 @@ class _RegisterPageState extends State<RegisterPage> {
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      create: (context) => RegisterCubit(),
+      // create: (context) => RegisterCubit(),
+      create: (context) => RegisterBloc(),
       child: Builder(builder: (context) {
-        final cubit = RegisterCubit.getObject(context);
+        // final cubit = RegisterCubit.getObject(context);
+        final bloc = RegisterBloc.getObject(context);
+
         return Scaffold(
           appBar: AppBar(
             title: Text(
@@ -47,18 +49,18 @@ class _RegisterPageState extends State<RegisterPage> {
           ),
           body: SingleChildScrollView(
             child: Form(
-              key: cubit.formKey,
+              key: bloc.formKey,
               autovalidateMode: AutovalidateMode.onUserInteraction,
               child: Column(
                 children: [
                   SizedBox(
                     height: 9.h,
                   ),
-                  BlocBuilder<RegisterCubit, RegisterStates>(
+                  BlocBuilder<RegisterBloc, RegisterState>(
                     builder: (context, state) => CircleAvatar(
                       radius: 50.r,
-                      backgroundImage: cubit.myImage != null
-                          ? FileImage(cubit.myImage!) as ImageProvider
+                      backgroundImage: bloc.myImage != null
+                          ? FileImage(bloc.myImage!) as ImageProvider
                           : const AssetImage('assets/images/photo.png'),
                     ),
                   ),
@@ -90,30 +92,32 @@ class _RegisterPageState extends State<RegisterPage> {
                               mainAxisAlignment: MainAxisAlignment.spaceAround,
                               children: [
                                 ElevatedButton.icon(
-                                    style: ElevatedButton.styleFrom(
-                                        backgroundColor:
-                                            const Color(0xffFFBB3B)),
                                     onPressed: () {
-                                      cubit.chooseImg(
+                                      bloc.chooseImg(context,
                                           imageSource: ImageSource.gallery);
                                     },
-                                    icon: const Icon(Icons.image),
+                                    icon: Icon(
+                                      Icons.image,
+                                      color: Theme.of(context).hintColor,
+                                    ),
                                     label: Text(
                                       'Gallery',
-                                      style: TextStyle(fontSize: 15.sp),
+                                      style: TextStyle(
+                                          color: Colors.white, fontSize: 15.sp),
                                     )),
                                 ElevatedButton.icon(
-                                    style: ElevatedButton.styleFrom(
-                                        backgroundColor:
-                                            const Color(0xffFFBB3B)),
                                     onPressed: () {
-                                      cubit.chooseImg(
+                                      bloc.chooseImg(context,
                                           imageSource: ImageSource.camera);
                                     },
-                                    icon: const Icon(Icons.camera_alt),
+                                    icon: Icon(
+                                      Icons.camera_alt,
+                                      color: Theme.of(context).hintColor,
+                                    ),
                                     label: Text(
                                       'Camera',
-                                      style: TextStyle(fontSize: 15.sp),
+                                      style: TextStyle(
+                                          color: Colors.white, fontSize: 15.sp),
                                     ))
                               ],
                             ),
@@ -138,7 +142,7 @@ class _RegisterPageState extends State<RegisterPage> {
                   Input(
                     title: 'FIRST NAME',
                     keyBoardType: TextInputType.name,
-                    controller: cubit.nameController,
+                    controller: bloc.nameController,
                     validator: (value) {
                       if (value!.isEmpty) {
                         return 'Name is required';
@@ -149,7 +153,7 @@ class _RegisterPageState extends State<RegisterPage> {
                   Input(
                     title: 'LAST NAME',
                     keyBoardType: TextInputType.name,
-                    controller: cubit.lastNameController,
+                    controller: bloc.lastNameController,
                     validator: (value) {
                       if (value!.isEmpty) {
                         return 'Lastname is required';
@@ -160,7 +164,7 @@ class _RegisterPageState extends State<RegisterPage> {
                   Input(
                     title: 'EMAIL',
                     keyBoardType: TextInputType.emailAddress,
-                    controller: cubit.emailController,
+                    controller: bloc.emailController,
                     validator: (value) {
                       if (value!.isEmpty) {
                         return 'Email is required';
@@ -173,7 +177,7 @@ class _RegisterPageState extends State<RegisterPage> {
                   Input(
                     title: 'PASSWORD',
                     keyBoardType: TextInputType.visiblePassword,
-                    controller: cubit.passwordController,
+                    controller: bloc.passwordController,
                     isPassword: true,
                     validator: (value) {
                       if (value!.isEmpty) {
@@ -185,34 +189,36 @@ class _RegisterPageState extends State<RegisterPage> {
                   Input(
                     title: 'CONFIRM PASSWORD',
                     keyBoardType: TextInputType.visiblePassword,
-                    controller: cubit.passwordConfirmController,
+                    controller: bloc.passwordConfirmController,
                     isLast: true,
                     isPassword: true,
                     validator: (value) {
                       if (value!.isEmpty) {
                         return 'Password is required';
-                      } else if (value != cubit.passwordController.text) {
+                      } else if (value != bloc.passwordController.text) {
                         return 'Write the same password';
                       }
                       return null;
                     },
                   ),
-                  BlocConsumer<RegisterCubit, RegisterStates>(
+                  BlocConsumer<RegisterBloc, RegisterState>(
                       listener: (context, state) {
-                    if (state is RegisterSuccessState) {
+                    if (state is RegisterSState) {
                       // showMessage(msg: state.msg);
                       navigateTo(page: const MasterPage(), withHistory: false);
                     }
-                    if (state is RegisterFailedeState) {
+                    if (state is RegisterFState) {
                       showMessage(msg: state.msg);
                     }
                   }, builder: (context, state) {
-                    if (state is RegisterLoadingeState) {
+                    if (state is RegisterLState) {
                       return const CircularProgressIndicator();
                     }
                     return MyButton(
                       text: 'REGISTER',
-                      onPress: cubit.register,
+                      onPress: () {
+                        bloc.register(context);
+                      },
                     );
                   }),
                 ],

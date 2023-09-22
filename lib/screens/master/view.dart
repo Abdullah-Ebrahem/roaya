@@ -21,13 +21,13 @@ class _MasterPageState extends State<MasterPage> {
         showDialog(
           context: context,
           builder: (context) => AlertDialog(
-            title: const Text('Are you sure you want to quit'),
+            title: const Text('Are you sure you want to quit ?'),
             actions: [
               ElevatedButton(
                   style: ElevatedButton.styleFrom(
-                      shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(9.r)),
-                      backgroundColor: Theme.of(context).primaryColor),
+                    shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(9.r)),
+                  ),
                   onPressed: () {
                     if (Platform.isAndroid) {
                       SystemNavigator.pop();
@@ -35,12 +35,18 @@ class _MasterPageState extends State<MasterPage> {
                       exit(0);
                     }
                   },
-                  child: const Text('Quit')),
+                  child: const Text(
+                    'Quit',
+                    style: TextStyle(color: Colors.white),
+                  )),
               TextButton(
                   onPressed: () {
                     Navigator.of(context).pop();
                   },
-                  child: const Text('Cancel'))
+                  child: Text(
+                    'Cancel',
+                    style: TextStyle(color: Theme.of(context).primaryColor),
+                  ))
             ],
           ),
         );
@@ -55,7 +61,6 @@ class _MasterPageState extends State<MasterPage> {
             showSelectedLabels: false,
             selectedIconTheme: IconThemeData(size: 24.w),
             selectedFontSize: 14.sp,
-            backgroundColor: Theme.of(context).primaryColor,
             currentIndex: controller.currentIndex,
             onTap: (value) {
               controller.currentIndex = value;

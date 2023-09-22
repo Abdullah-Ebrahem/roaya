@@ -4,8 +4,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:sec_project/core/button.dart';
 import 'package:sec_project/core/input.dart';
 import 'package:sec_project/core/methods.dart';
-import 'package:sec_project/screens/login/cubit.dart';
-import 'package:sec_project/screens/login/states.dart';
+import 'package:sec_project/screens/login/bloc/login_bloc.dart';
 import 'package:sec_project/screens/master/view.dart';
 import 'package:sec_project/screens/register/view.dart';
 
@@ -15,13 +14,15 @@ class LoginPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      create: (context) => LoginCubit(),
+      // create: (context) => LoginCubit(),
+      create: (context) => LoginBloc(),
       child: Builder(builder: (context) {
-        final cubit = LoginCubit.getObject(context);
+        // final cubit = LoginCubit.getObject(context);
+        final bloc = LoginBloc.getObject(context);
         return Scaffold(
           body: SingleChildScrollView(
             child: Form(
-              key: cubit.formKey,
+              key: bloc.formKey,
               autovalidateMode: AutovalidateMode.onUserInteraction,
               child: Column(
                 // List [  ]
@@ -39,7 +40,7 @@ class LoginPage extends StatelessWidget {
                   ),
                   Input(
                     title: 'Email',
-                    controller: cubit.emailController,
+                    controller: bloc.emailController,
                     keyBoardType: TextInputType.emailAddress,
                     validator: (value) {
                       if (value!.isEmpty) {
@@ -52,7 +53,7 @@ class LoginPage extends StatelessWidget {
                   ),
                   Input(
                     title: 'Password',
-                    controller: cubit.passwordController,
+                    controller: bloc.passwordController,
                     keyBoardType: TextInputType.visiblePassword,
                     isLast: true,
                     isPassword: true,
@@ -64,23 +65,23 @@ class LoginPage extends StatelessWidget {
                       return null;
                     },
                   ),
-                  BlocConsumer<LoginCubit, LoginStates>(
+                  BlocConsumer<LoginBloc, LoginState>(
                     listener: (context, state) {
-                      if (state is LoginFailedeState) {
+                      if (state is LoginFState) {
                         showMessage(msg: state.msg);
                       }
-                      if (state is LoginSuccessState) {
+                      if (state is LoginSState) {
                         navigateTo(page: const MasterPage());
                       }
                     },
                     builder: (context, state) {
-                      if (state is LoginLoadingeState) {
+                      if (state is LoginLState) {
                         return const CircularProgressIndicator();
                       }
                       return MyButton(
                         text: 'Login',
                         onPress: () {
-                          cubit.login();
+                          bloc.login(context);
                         },
                       );
                     },

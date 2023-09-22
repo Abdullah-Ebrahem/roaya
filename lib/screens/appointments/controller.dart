@@ -22,6 +22,7 @@ class AppointmentsController {
     if (date != null && appointment != appointments[0]) {
       CacheHeper.saveAppointment(
           appointment: '$appointment  ${date.toString().split(' ').first}');
+      showMessage(msg: 'Appointment saved');
     } else {
       showMessage(msg: 'Choose a day and a time');
     }
